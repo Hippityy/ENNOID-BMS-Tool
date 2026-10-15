@@ -54,6 +54,8 @@ void PageMasterCell::setDieBieMS(BMSInterface *dieBieMS)
         ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "cellMonitorICCount");
         ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "noOfParallelModules");
         ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "noOfCellsSeries");
+        ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "firstICNoCells");
+        ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "lastICNoOfCells");
         ui->specificationsTab->addRowSeparator(tr("SOC - Pack capacity"));
         ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "batteryCapacity");
         ui->specificationsTab->addParamRow(mDieBieMS->bmsConfig(), "cellTypeUsed");

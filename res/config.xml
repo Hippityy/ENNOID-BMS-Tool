@@ -23,6 +23,48 @@ p, li { white-space: pre-wrap; }
             <suffix></suffix>
             <vTx>1</vTx>
         </noOfCellsSeries>
+        <firstICNoCells>
+            <longName>First monitoring IC cell count</longName>
+            <type>2</type>
+            <transmittable>1</transmittable>
+            <description>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; ; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Number of cell(groups) on the first monitoring IC. &lt;/p&gt;
+</description>
+            <cDefine>FIRST_IC_NO_CELLS</cDefine>
+            <editorScale>1</editorScale>
+            <editAsPercentage>0</editAsPercentage>
+            <maxInt>18</maxInt>
+            <minInt>2</minInt>
+            <showDisplay>0</showDisplay>
+            <stepInt>1</stepInt>
+            <valInt>12</valInt>
+            <suffix></suffix>
+            <vTx>1</vTx>
+        </firstICNoCells>
+        <lastICNoOfCells>
+            <longName>last monitoring IC cell count</longName>
+            <type>2</type>
+            <transmittable>1</transmittable>
+            <description>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; ; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Number of cell(groups) on the last monitoring IC. &lt;/p&gt;
+</description>
+            <cDefine>LAST_IC_NO_CELLS</cDefine>
+            <editorScale>1</editorScale>
+            <editAsPercentage>0</editAsPercentage>
+            <maxInt>18</maxInt>
+            <minInt>0</minInt>
+            <showDisplay>0</showDisplay>
+            <stepInt>1</stepInt>
+            <valInt>0</valInt>
+            <suffix></suffix>
+            <vTx>1</vTx>
+        </lastICNoOfCells>
         <noOfParallelModules>
             <longName>Parallel modules count</longName>
             <type>2</type>
@@ -374,6 +416,7 @@ p, li { white-space: pre-wrap; }
             <enumNames>CAN-&gt;ENNOID-Shunt</enumNames>
             <enumNames>CAN-&gt;Isabellenhutte</enumNames>
             <enumNames>CAN-&gt;VESC (Discharge), ISL28022 (Charge)</enumNames>
+            <enumNames>ISL28022 Dual</enumNames>
         </packCurrentDataSource>
         <buzzerSignalSource>
             <longName>Signal source</longName>
@@ -1238,8 +1281,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Choose the display style for the I2C SSD1306 display when the BMS is under load enabled state.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</description>
             <cDefine>DISP_STYLE</cDefine>
             <valInt>0</valInt>
-            <enumNames>Basic</enumNames>
-            <enumNames>Advanced</enumNames>
+            <enumNames>Legacy</enumNames>
+            <enumNames>128x64</enumNames>
+            <enumNames>96x16</enumNames>
+            <enumNames>128x32</enumNames>
         </displayStyle>
         <maxUnderAndOverVoltageErrorCount>
             <longName>Max OVP &amp; UVP errors</longName>
@@ -1619,6 +1664,32 @@ p, li { white-space: pre-wrap; }
             <suffix></suffix>
             <vTx>5</vTx>
         </tempEnableMaskExpansion>
+        <cellEnableMask>
+                    <longName>cell enable mask</longName>
+                    <type>2</type>
+                    <transmittable>1</transmittable>
+                    <description>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+        p, li { white-space: pre-wrap; }
+        &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; ; font-weight:400; font-style:normal;&quot;&gt;
+        &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'DejaVu Sans';&quot;&gt;cell monitoring mask:&lt;/span&gt;&lt;/p&gt;
+        &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'DejaVu Sans';&quot;&gt;default = 0 = Disable mask for cell monitoring&lt;/span&gt;&lt;/p&gt;
+        &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+        &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The selected decimal value is transfered in binary :&lt;/p&gt;
+        &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+        &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;65 535 = (1111 1111 1111 1111) = Enable all channels&lt;/p&gt;
+        &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1022 = (0000 0011 1111 1110) = Enable cells 2 to 10&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</description>
+                    <cDefine>CELL_ENABLE_MASK</cDefine>
+                    <editorScale>0</editorScale>
+                    <editAsPercentage>0</editAsPercentage>
+                    <maxInt>65536</maxInt>
+                    <minInt>0</minInt>
+                    <showDisplay>0</showDisplay>
+                    <stepInt>1</stepInt>
+                    <valInt>1</valInt>
+                    <suffix></suffix>
+                    <vTx>5</vTx>
+                </cellEnableMask>
         <noOfTempSensorPerModule>
             <longName>Temp sensor per balancing IC</longName>
             <type>2</type>
@@ -1712,6 +1783,7 @@ p, li { white-space: pre-wrap; }
             <enumNames>PANASONIC_18650_GA</enumNames>
             <enumNames>PANSONIC_18650_BD</enumNames>
             <enumNames>SAMSUNG_30Q</enumNames>
+            <enumNames>GENERIC_LIFEPO4</enumNames>
         </cellTypeUsed>
         <LCUseDischarge>
             <longName>Discharge output</longName>
@@ -2578,6 +2650,7 @@ p, li { white-space: pre-wrap; }
         <ser>powerDownDelay</ser>
         <ser>humidityICType</ser>
         <ser>cellTypeUsed</ser>
-
+        <ser>firstICNoCells</ser>
+        <ser>lastICNoOfCells</ser>
     </SerOrder>
 </ConfigParams>

@@ -588,8 +588,8 @@ QString Commands::faultStateToStr(bms_fault_code fault)
     case FAULT_CODE_CELL_HARD_UNDER_VOLTAGE: return "Cell hard undervoltage";
     case FAULT_CODE_CELL_SOFT_OVER_VOLTAGE: return "Cell soft overvoltage";
     case FAULT_CODE_CELL_SOFT_UNDER_VOLTAGE: return "Cell soft undervoltage";
-    case FAULT_CODE_MAX_UVP_OVP_ERRORS: return "MAX OVP/UVP errors";
-    case FAULT_CODE_MAX_UVT_OVT_ERRORS: return "MAX OVT/UVT errors";
+    case FAULT_CODE_MAX_UVP_OVP_ERRORS: return "MAX OVER/UNDER CELL VOLTAGE errors";
+    case FAULT_CODE_MAX_UVT_OVT_ERRORS: return "MAX OVER/UNDER TEMPERATURE errors";
     case FAULT_CODE_OVER_CURRENT: return "Over current";
     case FAULT_CODE_OVER_TEMP_BMS: return "Over temp BMS";
     case FAULT_CODE_UNDER_TEMP_BMS: return "Under temp BMS";

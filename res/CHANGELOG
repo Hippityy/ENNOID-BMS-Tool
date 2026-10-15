@@ -1,3 +1,7 @@
+=== FW 6.05 ===
+* Wider faultCode and op_state in the RT data tab
+* New settings for last monitoring IC cell num & first monitoring IC cell num
+
 === FW 6.00 ===
 * SOC tracking now use lowest cell voltage instead of current tracking
 

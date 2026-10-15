@@ -1,1 +1,9 @@
 *.user
+*.zip
+*.dmg
+*.o
+*.app
+.DS_Store
+build/
+.qmake.stash
+Makefile

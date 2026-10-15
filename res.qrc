@@ -124,5 +124,17 @@
         <file>res/config.xml</file>
         <file>res/logo_white.png</file>
         <file>res/bootloaders/generic.bin</file>
+        <file>res/firmwares/CHANGELOG</file>
+        <file>res/firmwares/ENNOID-HV-2/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-LV-2/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-MASTER-XLITE/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-SS/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-12/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-12-V2/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-20-V2/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-24/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-24-V2/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-24-V3/ENNOID-BMS.bin</file>
+        <file>res/firmwares/ENNOID-XLITE-24-V4/ENNOID-BMS.bin</file>
     </qresource>
 </RCC>

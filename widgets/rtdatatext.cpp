@@ -89,7 +89,7 @@ void RtDataText::paintEvent(QPaintEvent *event)
     painter.setFont(font);
 
     QRectF br = painter.boundingRect(QRectF(0, 0, 4000, 4000),
-                                    "Fault   : 00000000000000000"
+                                    "Fault   : 00000000000000000000000000000000000000000000"
                                     "T\n"
                                     "T\n"
                                     "T\n"
