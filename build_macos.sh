@@ -50,7 +50,16 @@ fi
 
 echo "Step 3: Deploying Qt frameworks and creating DMG..."
 if [ -n "$MACDEPLOYQT_BIN" ]; then
-    "$MACDEPLOYQT_BIN" "$APP_PATH" -qmldir=mobile -dmg
+    "$MACDEPLOYQT_BIN" "$APP_PATH" -qmldir=mobile
+    
+    echo "Creating DMG with Applications folder shortcut..."
+    rm -rf "dmg_staging" "ENNOID-BMS-Tool.dmg"
+    mkdir -p "dmg_staging"
+    cp -R "$APP_PATH" "dmg_staging/"
+    ln -s /Applications "dmg_staging/Applications"
+    hdiutil create -volname "ENNOID-BMS-Tool" -srcfolder "dmg_staging" -ov -format UDZO "ENNOID-BMS-Tool.dmg"
+    rm -rf "dmg_staging"
+
     echo "Generated disk image: ENNOID-BMS-Tool.dmg"
 else
     echo "Warning: macdeployqt not found, skipping DMG packaging."
