@@ -417,7 +417,6 @@ p, li { white-space: pre-wrap; }
             <enumNames>CAN-&gt;Isabellenhutte</enumNames>
             <enumNames>CAN-&gt;VESC (Discharge), ISL28022 (Charge)</enumNames>
             <enumNames>ISL28022 Dual</enumNames>
-            <enumNames>LEM DHAB (ADC)</enumNames>
         </packCurrentDataSource>
         <buzzerSignalSource>
             <longName>Signal source</longName>
