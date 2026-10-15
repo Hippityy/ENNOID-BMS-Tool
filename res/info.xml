@@ -13,6 +13,14 @@ p, li { white-space: pre-wrap; }
             <cDefine></cDefine>
             <valInt>0</valInt>
             <enumNames>6.00</enumNames>
+            <enumNames>6.01</enumNames>
+            <enumNames>6.02</enumNames>
+            <enumNames>6.03</enumNames>
+            <enumNames>6.04</enumNames>
+            <enumNames>6.05</enumNames>
+            <enumNames>6.06</enumNames>
+            <enumNames>6.6</enumNames>
+            <enumNames>6.60</enumNames>
         </fw_version>
         <help_can_forward>
             <longName>CAN Forwarding</longName>
