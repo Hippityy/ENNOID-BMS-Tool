@@ -18,7 +18,7 @@ QMAKE_CXXFLAGS += -Wno-deprecated-copy
 
 # Options
 #Build mobile GUI
-CONFIG += build_mobile
+#CONFIG += build_mobile
 
 
 # Bluetooth available
@@ -41,6 +41,13 @@ android: QT += androidextras
 android: TARGET = ENNOID-BMS-Tool
 !android: TARGET = ENNOID-BMS-ToolV$$DT_VERSION
 
+macx {
+    TARGET = ENNOID-BMS-Tool
+    ICON = osx/app_icon.icns
+    QMAKE_INFO_PLIST = osx/Info.plist
+    DISTFILES += osx/Info.plist osx/app_icon.icns osx/entitlements.plist
+}
+
 TEMPLATE = app
 
 release_win {
@@ -60,6 +67,14 @@ release_lin {
     MOC_DIR = build/lin/obj
     RCC_DIR = build/lin/obj
     UI_DIR = build/lin/obj
+}
+
+release_mac {
+    DESTDIR = build/mac
+    OBJECTS_DIR = build/mac/obj
+    MOC_DIR = build/mac/obj
+    RCC_DIR = build/mac/obj
+    UI_DIR = build/mac/obj
 }
 
 release_android {

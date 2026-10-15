@@ -1,0 +1,29 @@
+name: Build macOS DMG
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt 5
+        run: |
+          brew install qt@5
+          echo "/opt/homebrew/opt/qt@5/bin" >> $GITHUB_PATH
+
+      - name: Build macOS app
+        run: |
+          ./build_macos.sh
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: ENNOID-BMS-Tool-macOS-AppleSilicon
+          path: ENNOID-BMS-Tool.dmg

@@ -18,3 +18,21 @@ Latest compiled version can be found in the release tab:
 [ENNOID-BMS Firmware](https://github.com/EnnoidMe/ENNOID-BMS-Firmware/tree/ENNOID) Can be flashed with the ENNOID-BMS Tool in the firmware tab.  
 
 The compiled build .bin and hex files can be found in the MDK-ARM folder [Firmware files](https://github.com/EnnoidMe/ENNOID-BMS-Firmware/tree/ENNOID/MDK-ARM/ENNOID-BMS)
+
+# Building on macOS
+
+1. Install Qt 5 via Homebrew:
+   ```bash
+   brew install qt@5
+   ```
+2. Run the build script:
+   ```bash
+   ./build_macos.sh
+   ```
+   This will compile the application and bundle `ENNOID-BMS-Tool.app` and `ENNOID-BMS-Tool.dmg`.
+
+### Running on Another Mac
+If macOS blocks opening the app on an un-notarized Mac, run:
+```bash
+xattr -cr /Applications/ENNOID-BMS-Tool.app
+```
