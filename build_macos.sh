@@ -37,7 +37,7 @@ fi
 NCPU=$(sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
 echo "Step 1: Running qmake..."
-"$QMAKE_BIN" "CONFIG-=build_mobile" ENNOID-BMS-Tool.pro
+"$QMAKE_BIN" "CONFIG-=build_mobile" "CONFIG+=sdk_no_version_check" ENNOID-BMS-Tool.pro
 
 echo "Step 2: Compiling with $NCPU cores..."
 make -j"$NCPU"
