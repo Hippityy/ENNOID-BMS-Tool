@@ -48,11 +48,14 @@ if [ ! -d "$APP_PATH" ]; then
     exit 1
 fi
 
-echo "Step 3: Deploying Qt frameworks and creating DMG..."
+echo "Step 3: Deploying Qt frameworks..."
 if [ -n "$MACDEPLOYQT_BIN" ]; then
     "$MACDEPLOYQT_BIN" "$APP_PATH" -qmldir=mobile
+
+    echo "Step 4: Re-signing bundle with ad-hoc signature for Apple Silicon..."
+    codesign --force --deep --sign - "$APP_PATH"
     
-    echo "Creating DMG with Applications folder shortcut..."
+    echo "Step 5: Creating DMG with Applications folder shortcut..."
     rm -rf "dmg_staging" "ENNOID-BMS-Tool.dmg"
     mkdir -p "dmg_staging"
     cp -R "$APP_PATH" "dmg_staging/"
