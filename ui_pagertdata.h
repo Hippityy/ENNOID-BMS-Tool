@@ -101,6 +101,7 @@ public:
         dutyCycleGroup->setObjectName(QString::fromUtf8("dutyCycleGroup"));
         dutyCycleLayout = new QHBoxLayout(dutyCycleGroup);
         dutyCycleLayout->setObjectName(QString::fromUtf8("dutyCycleLayout"));
+        dutyCycleLayout->setContentsMargins(6, 4, 6, 4);
         balanceAllTimeBox = new QCheckBox(dutyCycleGroup);
         balanceAllTimeBox->setObjectName(QString::fromUtf8("balanceAllTimeBox"));
 
@@ -155,6 +156,8 @@ public:
 
 
         verticalLayout_5->addWidget(dutyCycleGroup);
+        verticalLayout_5->setStretch(0, 1);
+        verticalLayout_5->setStretch(1, 0);
 
         tabWidget->addTab(cellBarGraphTab, QString());
         auxBarGraphTab = new QWidget();
@@ -322,7 +325,7 @@ public:
 
         retranslateUi(PageRtData);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(PageRtData);
