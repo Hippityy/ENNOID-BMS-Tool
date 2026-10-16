@@ -37,7 +37,6 @@ public:
     QWidget *cellBarGraphTab;
     QVBoxLayout *verticalLayout_5;
     QCustomPlot *cellBarGraph;
-    QGroupBox *dutyCycleGroup;
     QHBoxLayout *dutyCycleLayout;
     QCheckBox *balanceAllTimeBox;
     QFrame *dutyCycleLine;
@@ -97,55 +96,55 @@ public:
 
         verticalLayout_5->addWidget(cellBarGraph);
 
-        dutyCycleGroup = new QGroupBox(cellBarGraphTab);
-        dutyCycleGroup->setObjectName(QString::fromUtf8("dutyCycleGroup"));
-        dutyCycleLayout = new QHBoxLayout(dutyCycleGroup);
+        dutyCycleLayout = new QHBoxLayout();
         dutyCycleLayout->setObjectName(QString::fromUtf8("dutyCycleLayout"));
-        dutyCycleLayout->setContentsMargins(6, 4, 6, 4);
-        balanceAllTimeBox = new QCheckBox(dutyCycleGroup);
+        dutyCycleLayout->setContentsMargins(4, 2, 4, 2);
+        balanceAllTimeBox = new QCheckBox(cellBarGraphTab);
         balanceAllTimeBox->setObjectName(QString::fromUtf8("balanceAllTimeBox"));
 
         dutyCycleLayout->addWidget(balanceAllTimeBox);
 
-        dutyCycleLine = new QFrame(dutyCycleGroup);
+        dutyCycleLine = new QFrame(cellBarGraphTab);
         dutyCycleLine->setObjectName(QString::fromUtf8("dutyCycleLine"));
         dutyCycleLine->setFrameShape(QFrame::VLine);
         dutyCycleLine->setFrameShadow(QFrame::Sunken);
 
         dutyCycleLayout->addWidget(dutyCycleLine);
 
-        dutyCycleEnableBox = new QCheckBox(dutyCycleGroup);
+        dutyCycleEnableBox = new QCheckBox(cellBarGraphTab);
         dutyCycleEnableBox->setObjectName(QString::fromUtf8("dutyCycleEnableBox"));
 
         dutyCycleLayout->addWidget(dutyCycleEnableBox);
 
-        labelTimeOn = new QLabel(dutyCycleGroup);
+        labelTimeOn = new QLabel(cellBarGraphTab);
         labelTimeOn->setObjectName(QString::fromUtf8("labelTimeOn"));
 
         dutyCycleLayout->addWidget(labelTimeOn);
 
-        timeOnBox = new QSpinBox(dutyCycleGroup);
+        timeOnBox = new QSpinBox(cellBarGraphTab);
         timeOnBox->setObjectName(QString::fromUtf8("timeOnBox"));
+        timeOnBox->setMaximumSize(QSize(80, 16777215));
         timeOnBox->setMinimum(1);
         timeOnBox->setMaximum(86400);
         timeOnBox->setValue(5);
 
         dutyCycleLayout->addWidget(timeOnBox);
 
-        labelTimeOff = new QLabel(dutyCycleGroup);
+        labelTimeOff = new QLabel(cellBarGraphTab);
         labelTimeOff->setObjectName(QString::fromUtf8("labelTimeOff"));
 
         dutyCycleLayout->addWidget(labelTimeOff);
 
-        timeOffBox = new QSpinBox(dutyCycleGroup);
+        timeOffBox = new QSpinBox(cellBarGraphTab);
         timeOffBox->setObjectName(QString::fromUtf8("timeOffBox"));
+        timeOffBox->setMaximumSize(QSize(80, 16777215));
         timeOffBox->setMinimum(1);
         timeOffBox->setMaximum(86400);
         timeOffBox->setValue(5);
 
         dutyCycleLayout->addWidget(timeOffBox);
 
-        dutyCycleStatusLabel = new QLabel(dutyCycleGroup);
+        dutyCycleStatusLabel = new QLabel(cellBarGraphTab);
         dutyCycleStatusLabel->setObjectName(QString::fromUtf8("dutyCycleStatusLabel"));
 
         dutyCycleLayout->addWidget(dutyCycleStatusLabel);
@@ -155,7 +154,7 @@ public:
         dutyCycleLayout->addItem(horizontalSpacer_duty);
 
 
-        verticalLayout_5->addWidget(dutyCycleGroup);
+        verticalLayout_5->addLayout(dutyCycleLayout);
         verticalLayout_5->setStretch(0, 1);
         verticalLayout_5->setStretch(1, 0);
 
@@ -334,7 +333,6 @@ public:
     void retranslateUi(QWidget *PageRtData)
     {
         PageRtData->setWindowTitle(QCoreApplication::translate("PageRtData", "Form", nullptr));
-        dutyCycleGroup->setTitle(QCoreApplication::translate("PageRtData", "Balancing Duty Cycle", nullptr));
 #if QT_CONFIG(tooltip)
         balanceAllTimeBox->setToolTip(QCoreApplication::translate("PageRtData", "Toggle Cell Balance All Time in BMS configuration", nullptr));
 #endif // QT_CONFIG(tooltip)
@@ -343,12 +341,12 @@ public:
         dutyCycleEnableBox->setToolTip(QCoreApplication::translate("PageRtData", "Automatically cycle cell balancing on and off", nullptr));
 #endif // QT_CONFIG(tooltip)
         dutyCycleEnableBox->setText(QCoreApplication::translate("PageRtData", "Enable Duty Cycle", nullptr));
-        labelTimeOn->setText(QCoreApplication::translate("PageRtData", "Time ON (s):", nullptr));
+        labelTimeOn->setText(QCoreApplication::translate("PageRtData", "ON:", nullptr));
 #if QT_CONFIG(tooltip)
         timeOnBox->setToolTip(QCoreApplication::translate("PageRtData", "Duration in seconds to keep balancing ON during duty cycle", nullptr));
 #endif // QT_CONFIG(tooltip)
         timeOnBox->setSuffix(QCoreApplication::translate("PageRtData", " s", nullptr));
-        labelTimeOff->setText(QCoreApplication::translate("PageRtData", "Time OFF (s):", nullptr));
+        labelTimeOff->setText(QCoreApplication::translate("PageRtData", "OFF:", nullptr));
 #if QT_CONFIG(tooltip)
         timeOffBox->setToolTip(QCoreApplication::translate("PageRtData", "Duration in seconds to keep balancing OFF during duty cycle", nullptr));
 #endif // QT_CONFIG(tooltip)
