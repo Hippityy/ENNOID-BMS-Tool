@@ -231,6 +231,7 @@ void Commands::processPacket(QByteArray data)
         if (mbmsConfig) {
             mbmsConfig->deSerialize(vb);
             mbmsConfig->updateDone();
+            emit ackReceived("BMS Configuration Read OK");
 
             if (mCheckNextbmsConfig) {
                 mCheckNextbmsConfig = false;
