@@ -491,7 +491,8 @@ typedef enum {
     OP_STATE_ERROR_PRECHARGE,						    // 8
     OP_STATE_BALANCING,									// 9
     OP_STATE_CHARGED,									// 10
-    OP_STATE_FORCEON,									// 11
+    OP_STATE_FORCEON,							// 11
+    OP_STATE_ONEWHEEL,							// 12
 } OperationalStateTypedef;
 
 #endif // DATATYPES_H

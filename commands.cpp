@@ -231,7 +231,6 @@ void Commands::processPacket(QByteArray data)
         if (mbmsConfig) {
             mbmsConfig->deSerialize(vb);
             mbmsConfig->updateDone();
-            emit ackReceived("BMS Configuration Read OK");
 
             if (mCheckNextbmsConfig) {
                 mCheckNextbmsConfig = false;
@@ -571,7 +570,8 @@ QString Commands::opStateToStr(OperationalStateTypedef fault)
     case OP_STATE_BALANCING: return "Balancing";
     case OP_STATE_CHARGED: return "Charged";
     case OP_STATE_FORCEON: return "ForceOn";
-    default: return "Unknown fault";
+    case OP_STATE_ONEWHEEL: return "OneWheel";
+    default: return "Unknown state";
     }
 }
 
