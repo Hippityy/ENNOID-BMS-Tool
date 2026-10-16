@@ -32,6 +32,114 @@
          <item>
           <widget class="QCustomPlot" name="cellBarGraph" native="true"/>
          </item>
+         <item>
+          <widget class="QGroupBox" name="dutyCycleGroup">
+           <property name="title">
+            <string>Balancing Duty Cycle</string>
+           </property>
+           <layout class="QHBoxLayout" name="dutyCycleLayout">
+            <item>
+             <widget class="QCheckBox" name="balanceAllTimeBox">
+              <property name="toolTip">
+               <string>Toggle Cell Balance All Time in BMS configuration</string>
+              </property>
+              <property name="text">
+               <string>Cell Balance All Time</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="dutyCycleLine">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="dutyCycleEnableBox">
+              <property name="toolTip">
+               <string>Automatically cycle cell balancing on and off</string>
+              </property>
+              <property name="text">
+               <string>Enable Duty Cycle</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelTimeOn">
+              <property name="text">
+               <string>Time ON (s):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="timeOnBox">
+              <property name="toolTip">
+               <string>Duration in seconds to keep balancing ON during duty cycle</string>
+              </property>
+              <property name="suffix">
+               <string> s</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>86400</number>
+              </property>
+              <property name="value">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelTimeOff">
+              <property name="text">
+               <string>Time OFF (s):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="timeOffBox">
+              <property name="toolTip">
+               <string>Duration in seconds to keep balancing OFF during duty cycle</string>
+              </property>
+              <property name="suffix">
+               <string> s</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>86400</number>
+              </property>
+              <property name="value">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="dutyCycleStatusLabel">
+              <property name="text">
+               <string>Status: Inactive</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_duty">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="auxBarGraphTab">

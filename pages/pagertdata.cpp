@@ -36,6 +36,11 @@ PageRtData::PageRtData(QWidget *parent) :
     mTimer = new QTimer(this);
     mTimer->start(20);
 
+    mDutyCycleTimer = new QTimer(this);
+    connect(mDutyCycleTimer, SIGNAL(timeout()), this, SLOT(dutyCycleTimerSlot()));
+    mDutyCycleStateOn = false;
+    mDutyCyclePhaseEndMs = 0;
+
     mSecondCounter = 0.0;
     mLastUpdateTime = 0;
 
@@ -223,6 +228,13 @@ PageRtData::PageRtData(QWidget *parent) :
 
 PageRtData::~PageRtData()
 {
+    if (mDutyCycleTimer->isActive()) {
+        mDutyCycleTimer->stop();
+        if (mDieBieMS && mDieBieMS->isPortConnected()) {
+            mDieBieMS->bmsConfig()->updateParamBool("cellBalanceAllTime", false, this);
+            mDieBieMS->commands()->setBMSconf(false);
+        }
+    }
     delete ui;
 }
 
@@ -240,6 +252,20 @@ void PageRtData::setDieBieMS(BMSInterface *dieBieMS)
         connect(mDieBieMS->commands(), SIGNAL(cellsReceived(int,QVector<double>)),this, SLOT(cellsReceived(int,QVector<double>)));
         connect(mDieBieMS->commands(), SIGNAL(auxReceived(int,QVector<double>)),this, SLOT(auxReceived(int,QVector<double>)));
         connect(mDieBieMS->commands(), SIGNAL(expTempReceived(int,QVector<double>)),this, SLOT(expTempReceived(int,QVector<double>)));
+
+        connect(mDieBieMS->bmsConfig(), SIGNAL(paramChangedBool(QObject*,QString,bool)),
+                this, SLOT(paramChangedBool(QObject*,QString,bool)));
+        connect(mDieBieMS->bmsConfig(), SIGNAL(updated()),
+                this, SLOT(bmsConfigUpdated()));
+        connect(mDieBieMS, SIGNAL(portConnectedChanged()),
+                this, SLOT(portConnectedChanged()));
+
+        ConfigParam *p = mDieBieMS->bmsConfig()->getParam("cellBalanceAllTime");
+        if (p) {
+            bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+            ui->balanceAllTimeBox->setChecked(p->valInt != 0);
+            ui->balanceAllTimeBox->blockSignals(blocked);
+        }
     }
 }
 
@@ -509,3 +535,117 @@ void PageRtData::on_csvHelpButton_clicked()
     HelpDialog::showHelp(this, mDieBieMS->infoConfig(), "help_rt_logging");
 }
 */
+
+void PageRtData::paramChangedBool(QObject *src, QString name, bool newParam)
+{
+    if (src != this && name == "cellBalanceAllTime") {
+        if (ui->dutyCycleEnableBox->isChecked()) {
+            ui->dutyCycleEnableBox->setChecked(false);
+        }
+        bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+        ui->balanceAllTimeBox->setChecked(newParam);
+        ui->balanceAllTimeBox->blockSignals(blocked);
+    }
+}
+
+void PageRtData::bmsConfigUpdated()
+{
+    if (mDieBieMS && !ui->dutyCycleEnableBox->isChecked()) {
+        ConfigParam *p = mDieBieMS->bmsConfig()->getParam("cellBalanceAllTime");
+        if (p) {
+            bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+            ui->balanceAllTimeBox->setChecked(p->valInt != 0);
+            ui->balanceAllTimeBox->blockSignals(blocked);
+        }
+    }
+}
+
+void PageRtData::portConnectedChanged()
+{
+    if (mDieBieMS && !mDieBieMS->isPortConnected()) {
+        if (ui->dutyCycleEnableBox->isChecked()) {
+            ui->dutyCycleEnableBox->setChecked(false);
+        }
+    }
+}
+
+void PageRtData::on_balanceAllTimeBox_clicked(bool checked)
+{
+    if (mDieBieMS) {
+        mDieBieMS->bmsConfig()->updateParamBool("cellBalanceAllTime", checked, this);
+        mDieBieMS->commands()->setBMSconf(false);
+    }
+}
+
+void PageRtData::on_dutyCycleEnableBox_toggled(bool checked)
+{
+    if (checked) {
+        if (!mDieBieMS || !mDieBieMS->isPortConnected()) {
+            ui->dutyCycleStatusLabel->setText(tr("Status: Not connected"));
+            ui->dutyCycleEnableBox->setChecked(false);
+            return;
+        }
+
+        ui->balanceAllTimeBox->setEnabled(false);
+        mDutyCycleStateOn = true;
+        qint64 durationMs = (qint64)ui->timeOnBox->value() * 1000;
+        mDutyCyclePhaseEndMs = QDateTime::currentMSecsSinceEpoch() + durationMs;
+
+        bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+        ui->balanceAllTimeBox->setChecked(true);
+        ui->balanceAllTimeBox->blockSignals(blocked);
+
+        mDieBieMS->bmsConfig()->updateParamBool("cellBalanceAllTime", true, this);
+        mDieBieMS->commands()->setBMSconf(false);
+
+        ui->dutyCycleStatusLabel->setText(QString(tr("Status: ON (%1s)")).arg(ui->timeOnBox->value()));
+        mDutyCycleTimer->start(200);
+    } else {
+        mDutyCycleTimer->stop();
+        ui->balanceAllTimeBox->setEnabled(true);
+
+        bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+        ui->balanceAllTimeBox->setChecked(false);
+        ui->balanceAllTimeBox->blockSignals(blocked);
+
+        if (mDieBieMS && mDieBieMS->isPortConnected()) {
+            mDieBieMS->bmsConfig()->updateParamBool("cellBalanceAllTime", false, this);
+            mDieBieMS->commands()->setBMSconf(false);
+        }
+
+        ui->dutyCycleStatusLabel->setText(tr("Status: Inactive"));
+    }
+}
+
+void PageRtData::dutyCycleTimerSlot()
+{
+    if (!mDieBieMS || !mDieBieMS->isPortConnected()) {
+        ui->dutyCycleEnableBox->setChecked(false);
+        return;
+    }
+
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    qint64 remainingMs = mDutyCyclePhaseEndMs - now;
+
+    if (remainingMs <= 0) {
+        mDutyCycleStateOn = !mDutyCycleStateOn;
+        qint64 nextDurationMs = (qint64)(mDutyCycleStateOn ? ui->timeOnBox->value() : ui->timeOffBox->value()) * 1000;
+        mDutyCyclePhaseEndMs = now + nextDurationMs;
+        remainingMs = nextDurationMs;
+
+        bool blocked = ui->balanceAllTimeBox->blockSignals(true);
+        ui->balanceAllTimeBox->setChecked(mDutyCycleStateOn);
+        ui->balanceAllTimeBox->blockSignals(blocked);
+
+        mDieBieMS->bmsConfig()->updateParamBool("cellBalanceAllTime", mDutyCycleStateOn, this);
+        mDieBieMS->commands()->setBMSconf(false);
+    }
+
+    int remainingSec = (remainingMs + 999) / 1000;
+    if (mDutyCycleStateOn) {
+        ui->dutyCycleStatusLabel->setText(QString(tr("Status: ON (%1s)")).arg(remainingSec));
+    } else {
+        ui->dutyCycleStatusLabel->setText(QString(tr("Status: OFF (%1s)")).arg(remainingSec));
+    }
+}
+

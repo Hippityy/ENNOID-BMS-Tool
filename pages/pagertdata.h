@@ -63,6 +63,13 @@ private slots:
     //void on_csvEnableLogBox_clicked(bool checked);
     //void on_csvHelpButton_clicked();
 
+    void on_balanceAllTimeBox_clicked(bool checked);
+    void on_dutyCycleEnableBox_toggled(bool checked);
+    void paramChangedBool(QObject *src, QString name, bool newParam);
+    void bmsConfigUpdated();
+    void portConnectedChanged();
+    void dutyCycleTimerSlot();
+
 private:
     Ui::PageRtData *ui;
     BMSInterface *mDieBieMS;
@@ -92,6 +99,10 @@ private:
     qint64 mLastUpdateTime;
 
     bool mUpdateValPlot;
+
+    QTimer *mDutyCycleTimer;
+    bool mDutyCycleStateOn;
+    qint64 mDutyCyclePhaseEndMs;
 
     QCPBarsGroup *group;
     QCPBars *barsNormal;
