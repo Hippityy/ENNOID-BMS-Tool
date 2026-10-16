@@ -45,8 +45,8 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
         break;
     }
 
-    str.sprintf("%s (%s:%u %s): %s", typeStr.toLocal8Bit().data(),
-                context.file, context.line, context.function, localMsg.constData());
+    str = QString::asprintf("%s (%s:%u %s): %s", typeStr.toLocal8Bit().data(),
+                            context.file, context.line, context.function, localMsg.constData());
 
     if (PageDebugPrint::currentMsgHandler) {
         QString strTmp;
@@ -601,7 +601,11 @@ void MainWindow::reloadPages()
 
     // Adjust sizes
     QFontMetrics fm(this->font());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int width = fm.horizontalAdvance("Welcome & Wizards++++++");
+#else
     int width = fm.width("Welcome & Wizards++++++");
+#endif
     int height = fm.height();
 
     for(int i = 0; i < ui->pageList->count(); i++) {
