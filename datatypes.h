@@ -433,7 +433,10 @@ typedef enum {
     COMM_SET_ODOMETER,
 
     // ENNOID-BMS specific
-    COMM_EBMS_STORE_CONF = 150,
+    // FW >= 6.05 moved this block from 150..157 to 240..247. Verified against the
+    // official ENNOID-BMS-ToolV6.06 binary (sends 0xF0..0xF7) and the v6.06
+    // firmware images (thumb dispatch on #240).
+    COMM_EBMS_STORE_CONF = 240,
     COMM_EBMS_GET_CELLS,
     COMM_EBMS_GET_AUX,
     COMM_EBMS_GET_EXP_TEMP,
