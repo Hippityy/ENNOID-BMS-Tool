@@ -23,8 +23,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "digitalfiltering.h"
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
 #include <cmath>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#include "digitalfiltering.h"
 #include <QDebug>
 
 DigitalFiltering::DigitalFiltering()
@@ -235,8 +242,8 @@ QVector<double> DigitalFiltering::filterSignal(const QVector<double> &signal, co
 QVector<double> DigitalFiltering::generateFirFilter(double f_break, int bits, bool useHamming)
 {
     int taps = 1 << bits;
-    double imag[taps];
-    double filter_vector[taps];
+    QVector<double> imag(taps, 0.0);
+    QVector<double> filter_vector(taps, 0.0);
 
     for(int i = 0;i < taps;i++) {
         if (i < (int)((double)taps * f_break)) {
@@ -244,26 +251,20 @@ QVector<double> DigitalFiltering::generateFirFilter(double f_break, int bits, bo
         } else {
             filter_vector[i] = 0.0;
         }
-        imag[i] = 0;
     }
 
     for (int i = 0;i < taps / 2;i++) {
         filter_vector[taps - i - 1] = filter_vector[i];
     }
 
-    fft(1, bits, filter_vector, imag);
-    fftshift(filter_vector, taps);
+    fft(1, bits, filter_vector.data(), imag.data());
+    fftshift(filter_vector.data(), taps);
 
     if (useHamming) {
-        hamming(filter_vector, taps);
+        hamming(filter_vector.data(), taps);
     }
 
-    QVector<double> result;
-    for(int i = 0;i < taps;i++) {
-        result.append(filter_vector[i]);
-    }
-
-    return result;
+    return filter_vector;
 }
 
 QVector<double> DigitalFiltering::fftWithShift(QVector<double> &signal, int resultBits, bool scaleByLen)
