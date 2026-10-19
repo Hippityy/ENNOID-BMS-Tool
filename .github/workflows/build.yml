@@ -1,0 +1,148 @@
+name: Build & Release ENNOID-BMS-Tool
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: 'Publish/update GitHub release with artifacts'
+        required: false
+        type: boolean
+        default: false
+      release_tag:
+        description: 'Release tag to publish to'
+        required: false
+        type: string
+        default: 'v6.06'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build macOS (Apple Silicon)
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt 5
+        run: |
+          brew install qt@5
+          echo "/opt/homebrew/opt/qt@5/bin" >> $GITHUB_PATH
+
+      - name: Build macOS app & DMG
+        run: |
+          ./build_macos.sh
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ENNOID-BMS-Tool-macOS-AppleSilicon
+          path: ENNOID-BMS-Tool.dmg
+
+  build-linux:
+    name: Build Linux (x86_64)
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            libgl1-mesa-dev \
+            libfuse2 \
+            file \
+            wget \
+            qtbase5-dev \
+            qtdeclarative5-dev \
+            qtquickcontrols2-5-dev \
+            libqt5serialport5-dev \
+            libqt5bluetooth5-dev \
+            qttools5-dev-tools
+
+      - name: Build & Package Linux app
+        run: |
+          ./build_linux.sh --package
+
+      - name: Upload Linux Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ENNOID-BMS-Tool-Linux-x86_64
+          path: |
+            ENNOID-BMS-Tool-Linux-x86_64.AppImage
+            ENNOID-BMS-Tool-Linux-x86_64.tar.gz
+
+  build-windows:
+    name: Build Windows (x64)
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt 5.15.2
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          arch: 'win64_msvc2019_64'
+          modules: 'qtconnectivity qtserialport qtquickcontrols2'
+          cached: true
+
+      - name: Build & Package Windows app
+        shell: pwsh
+        run: |
+          ./build_windows.ps1
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ENNOID-BMS-Tool-Windows-x64
+          path: ENNOID-BMS-Tool-Windows-x64.zip
+
+  publish-release:
+    name: Publish to GitHub Release
+    needs: [build-macos, build-linux, build-windows]
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.publish_release == 'true' || github.event.inputs.publish_release == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_artifacts
+
+      - name: Prepare release files
+        run: |
+          mkdir -p upload_assets
+          find release_artifacts -type f \( -name "*.dmg" -o -name "*.AppImage" -o -name "*.tar.gz" -o -name "*.zip" \) -exec cp {} upload_assets/ \;
+          ls -lh upload_assets/
+
+      - name: Determine tag name
+        id: tag_info
+        run: |
+          if [ -n "${{ github.event.inputs.release_tag }}" ]; then
+            echo "tag=${{ github.event.inputs.release_tag }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v6.06" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag_info.outputs.tag }}
+          files: upload_assets/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

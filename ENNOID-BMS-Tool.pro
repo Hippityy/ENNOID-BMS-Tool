@@ -14,7 +14,13 @@ DEFINES += DT_VERSION=$$DT_VERSION
 }
 
 CONFIG += c++11
-QMAKE_CXXFLAGS += -Wno-deprecated-copy
+gcc | clang {
+    QMAKE_CXXFLAGS += -Wno-deprecated-copy
+}
+
+win32 {
+    RC_ICONS = res/icons/app_icon.ico
+}
 
 # Options
 #Build mobile GUI

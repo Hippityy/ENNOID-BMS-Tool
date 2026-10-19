@@ -1,9 +1,16 @@
 *.user
 *.zip
 *.dmg
+*.AppImage
+*.tar.gz
+*.exe
 *.o
 *.app
 .DS_Store
 build/
+AppDir/
+dmg_staging/
+ENNOID-BMS-Tool-Windows/
 .qmake.stash
 Makefile
+
