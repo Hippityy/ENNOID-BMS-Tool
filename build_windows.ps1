@@ -2,7 +2,8 @@ Write-Host "============================================="
 Write-Host "   Building ENNOID-BMS-Tool for Windows"
 Write-Host "============================================="
 
-# 1. Run qmake
+# 1. Clean stale stash and run qmake
+Remove-Item -Force -ErrorAction SilentlyContinue .qmake.stash
 qmake "CONFIG-=build_mobile" "CONFIG+=release" ENNOID-BMS-Tool.pro
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

@@ -24,6 +24,7 @@ echo "Using qmake at: $QMAKE_BIN"
 NCPU=$(nproc 2>/dev/null || echo 4)
 
 echo "Step 1: Running qmake..."
+rm -f .qmake.stash
 "$QMAKE_BIN" "CONFIG-=build_mobile" "CONFIG+=release" ENNOID-BMS-Tool.pro
 
 echo "Step 2: Compiling with $NCPU cores..."
@@ -55,7 +56,7 @@ Categories=Utility;Development;
 Terminal=false
 EOF
 
-    cp res/logo.png ennoid-bms-tool.png
+    cp res/icons/app_icon.png ennoid-bms-tool.png
 
     # Create AppDir
     rm -rf AppDir
