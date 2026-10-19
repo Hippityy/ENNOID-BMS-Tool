@@ -65,7 +65,7 @@ jobs:
             qtdeclarative5-dev \
             qtquickcontrols2-5-dev \
             libqt5serialport5-dev \
-            libqt5bluetooth5-dev \
+            qtconnectivity5-dev \
             qttools5-dev-tools
 
       - name: Build & Package Linux app
@@ -96,8 +96,7 @@ jobs:
         with:
           version: '5.15.2'
           arch: 'win64_msvc2019_64'
-          modules: 'qtconnectivity qtserialport qtquickcontrols2'
-          cached: true
+          cache: true
 
       - name: Build & Package Windows app
         shell: pwsh

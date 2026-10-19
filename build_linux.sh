@@ -15,7 +15,7 @@ elif [ -x "/usr/lib/qt5/bin/qmake" ]; then
 else
     echo "Error: qmake not found!"
     echo "Please install Qt 5 development packages:"
-    echo "  sudo apt-get install qtbase5-dev qtdeclarative5-dev qtquickcontrols2-5-dev libqt5serialport5-dev libqt5bluetooth5-dev qttools5-dev-tools"
+    echo "  sudo apt-get install qtbase5-dev qtdeclarative5-dev qtquickcontrols2-5-dev libqt5serialport5-dev qtconnectivity5-dev qttools5-dev-tools"
     exit 1
 fi
 

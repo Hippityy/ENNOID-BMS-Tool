@@ -6,8 +6,9 @@ Write-Host "============================================="
 qmake "CONFIG-=build_mobile" "CONFIG+=release" ENNOID-BMS-Tool.pro
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-# 2. Compile with nmake
-nmake
+# 2. Compile with nmake (enable parallel compilation across all CPU cores)
+$env:CL = "/MP"
+nmake release
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # 3. Locate executable
