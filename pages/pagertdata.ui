@@ -165,7 +165,34 @@
         <attribute name="title">
          <string>Temperatures LTC</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_8">
+        <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
+         <item>
+          <layout class="QHBoxLayout" name="ltcTempConversionLayout">
+           <item>
+            <widget class="QCheckBox" name="ltcTempCorrectionBox">
+             <property name="toolTip">
+              <string>Display-only Table 5 conversion from mur-embedded's thermistor reference. Assumes BMS R25/Rtop = 100 kΩ, beta = 4250 K, reference = 3.000 V. Does not change BMS settings, protection, firmware or logged data. Invalid/out-of-range readings are not extrapolated.</string>
+             </property>
+             <property name="text">
+              <string>Convert LTC temperatures (Table 5)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="ltcTempStatusLabel">
+             <property name="text">
+              <string>No LTC readings</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="ltcTempConversionSpacer">
+             <property name="orientation"><enum>Qt::Horizontal</enum></property>
+             <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
          <item>
           <widget class="QCustomPlot" name="auxBarGraph" native="true"/>
          </item>

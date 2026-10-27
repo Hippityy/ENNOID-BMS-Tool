@@ -24,6 +24,9 @@
 */
 
 #include "pagertdata.h"
+#include "ltctemperature.h"
+
+#include <limits>
 
 PageRtData::PageRtData(QWidget *parent) :
     QWidget(parent),
@@ -245,6 +248,8 @@ BMSInterface *PageRtData::bms() const
 
 void PageRtData::setDieBieMS(BMSInterface *dieBieMS)
 {
+    mLastLtcTemperatures.clear();
+    updateLtcTemperatures();
     mDieBieMS = dieBieMS;
 
     if (mDieBieMS) {
@@ -399,33 +404,50 @@ void PageRtData::cellsReceived(int cellCount, QVector<double> cellVoltageArray){
 }
 
 void PageRtData::auxReceived(int auxCount, QVector<double> auxVoltageArray){
+    mLastLtcTemperatures = auxVoltageArray.mid(0, qBound(0, auxCount, auxVoltageArray.size()));
+    updateLtcTemperatures();
+}
+
+void PageRtData::on_ltcTempCorrectionBox_toggled(bool checked)
+{
+    Q_UNUSED(checked);
+    updateLtcTemperatures();
+}
+
+void PageRtData::updateLtcTemperatures()
+{
+    const bool convert = ui->ltcTempCorrectionBox->isChecked();
     QVector<double> dataxNew;
-    dataxNew.clear();
     QVector<double> datayNormal;
-    datayNormal.clear();
     QVector<QString> labels;
-    int indexPointer;
-
-    for(indexPointer = 0; indexPointer < auxCount; indexPointer++){
-        dataxNew.append(indexPointer + 1);
-
-        if(auxVoltageArray[indexPointer] < -50.0){
-            datayNormal.append(0.0);
-        }else{
-            datayNormal.append(auxVoltageArray[indexPointer]);
+    int invalid = 0;
+    for (int i = 0; i < mLastLtcTemperatures.size(); ++i) {
+        const double reported = mLastLtcTemperatures[i];
+        double displayed = reported;
+        const bool valid = convert ? LtcTemperature::corrected(reported, displayed) :
+                                    std::isfinite(reported) && reported >= -50.0;
+        dataxNew.append(i + 1);
+        datayNormal.append(valid ? displayed : std::numeric_limits<double>::quiet_NaN());
+        if (valid) {
+            labels.append(tr("%1°C (TH%2)").arg(displayed, 0, 'f', convert ? 1 : 3).arg(i + 1));
+        } else {
+            ++invalid;
+            labels.append(tr("Invalid (TH%1)").arg(i + 1));
         }
-
-        QString voltageString = QStringLiteral("%1°C (TH").arg(auxVoltageArray[indexPointer], 0, 'f',3);
-        labels.append(voltageString + QString::number(indexPointer+1) + ")");
     }
 
     QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
     textTicker->addTicks(dataxNew, labels);
 
     ui->auxBarGraph->xAxis->setTicker(textTicker);
-    ui->auxBarGraph->xAxis->setRange(0.5, indexPointer + 0.5);
-    ui->auxBarGraph->yAxis->setRange(-40, 75);
+    ui->auxBarGraph->xAxis->setRange(0.5, qMax(1, mLastLtcTemperatures.size()) + 0.5);
+    ui->auxBarGraph->yAxis->setLabel(convert ? tr("Corrected temperature (°C)") :
+                                           tr("BMS reported temperature (°C)"));
+    ui->auxBarGraph->yAxis->setRange(-40, convert ? 120 : 75);
     barsTemperature->setData(dataxNew, datayNormal);
+    ui->ltcTempStatusLabel->setText(mLastLtcTemperatures.isEmpty() ? tr("No LTC readings") :
+        convert ? tr("Table 5 conversion · %1 invalid").arg(invalid) : tr("BMS reported values"));
+    ui->auxBarGraph->replot();
 }
 
 void PageRtData::expTempReceived(int expTempCount, QVector<double> expTempVoltageArray){
@@ -563,6 +585,8 @@ void PageRtData::bmsConfigUpdated()
 void PageRtData::portConnectedChanged()
 {
     if (mDieBieMS && !mDieBieMS->isPortConnected()) {
+        mLastLtcTemperatures.clear();
+        updateLtcTemperatures();
         if (ui->dutyCycleEnableBox->isChecked()) {
             ui->dutyCycleEnableBox->setChecked(false);
         }

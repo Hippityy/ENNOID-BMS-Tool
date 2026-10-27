@@ -65,6 +65,7 @@ private slots:
 
     void on_balanceAllTimeBox_clicked(bool checked);
     void on_dutyCycleEnableBox_toggled(bool checked);
+    void on_ltcTempCorrectionBox_toggled(bool checked);
     void paramChangedBool(QObject *src, QString name, bool newParam);
     void bmsConfigUpdated();
     void portConnectedChanged();
@@ -76,6 +77,7 @@ private:
     QTimer *mTimer;
 
     QVector<double> mPackVoltage;
+    QVector<double> mLastLtcTemperatures;
     QVector<double> mLCLoadVoltage;
     QVector<double> mLCLoadCurrent;
     QVector<double> mHCLoadVoltage;
@@ -114,6 +116,7 @@ private:
 
     void appendDoubleAndTrunc(QVector<double> *vec, double num, int maxSize);
     void updateZoom();
+    void updateLtcTemperatures();
 
 };
 

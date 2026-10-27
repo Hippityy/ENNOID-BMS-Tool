@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'pagertdata.ui'
 **
-** Created by: Qt User Interface Compiler version 5.14.2
+** Created by: Qt User Interface Compiler version 5.15.19
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
-#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QSpacerItem>
@@ -49,6 +48,10 @@ public:
     QSpacerItem *horizontalSpacer_duty;
     QWidget *auxBarGraphTab;
     QVBoxLayout *verticalLayout_8;
+    QHBoxLayout *ltcTempConversionLayout;
+    QCheckBox *ltcTempCorrectionBox;
+    QLabel *ltcTempStatusLabel;
+    QSpacerItem *ltcTempConversionSpacer;
     QCustomPlot *auxBarGraph;
     QWidget *expBarGraphTab;
     QVBoxLayout *verticalLayout_18;
@@ -155,19 +158,38 @@ public:
 
 
         verticalLayout_5->addLayout(dutyCycleLayout);
-        verticalLayout_5->setStretch(0, 1);
-        verticalLayout_5->setStretch(1, 0);
 
+        verticalLayout_5->setStretch(0, 1);
         tabWidget->addTab(cellBarGraphTab, QString());
         auxBarGraphTab = new QWidget();
         auxBarGraphTab->setObjectName(QString::fromUtf8("auxBarGraphTab"));
         verticalLayout_8 = new QVBoxLayout(auxBarGraphTab);
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        ltcTempConversionLayout = new QHBoxLayout();
+        ltcTempConversionLayout->setObjectName(QString::fromUtf8("ltcTempConversionLayout"));
+        ltcTempCorrectionBox = new QCheckBox(auxBarGraphTab);
+        ltcTempCorrectionBox->setObjectName(QString::fromUtf8("ltcTempCorrectionBox"));
+
+        ltcTempConversionLayout->addWidget(ltcTempCorrectionBox);
+
+        ltcTempStatusLabel = new QLabel(auxBarGraphTab);
+        ltcTempStatusLabel->setObjectName(QString::fromUtf8("ltcTempStatusLabel"));
+
+        ltcTempConversionLayout->addWidget(ltcTempStatusLabel);
+
+        ltcTempConversionSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        ltcTempConversionLayout->addItem(ltcTempConversionSpacer);
+
+
+        verticalLayout_8->addLayout(ltcTempConversionLayout);
+
         auxBarGraph = new QCustomPlot(auxBarGraphTab);
         auxBarGraph->setObjectName(QString::fromUtf8("auxBarGraph"));
 
         verticalLayout_8->addWidget(auxBarGraph);
 
+        verticalLayout_8->setStretch(1, 1);
         tabWidget->addTab(auxBarGraphTab, QString());
         expBarGraphTab = new QWidget();
         expBarGraphTab->setObjectName(QString::fromUtf8("expBarGraphTab"));
@@ -353,6 +375,11 @@ public:
         timeOffBox->setSuffix(QCoreApplication::translate("PageRtData", " s", nullptr));
         dutyCycleStatusLabel->setText(QCoreApplication::translate("PageRtData", "Status: Inactive", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(cellBarGraphTab), QCoreApplication::translate("PageRtData", "Cells Voltage", nullptr));
+#if QT_CONFIG(tooltip)
+        ltcTempCorrectionBox->setToolTip(QCoreApplication::translate("PageRtData", "Display-only Table 5 conversion from mur-embedded's thermistor reference. Assumes BMS R25/Rtop = 100 k\316\251, beta = 4250 K, reference = 3.000 V. Does not change BMS settings, protection, firmware or logged data. Invalid/out-of-range readings are not extrapolated.", nullptr));
+#endif // QT_CONFIG(tooltip)
+        ltcTempCorrectionBox->setText(QCoreApplication::translate("PageRtData", "Convert LTC temperatures (Table 5)", nullptr));
+        ltcTempStatusLabel->setText(QCoreApplication::translate("PageRtData", "No LTC readings", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(auxBarGraphTab), QCoreApplication::translate("PageRtData", "Temperatures LTC", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(expBarGraphTab), QCoreApplication::translate("PageRtData", "Temperatures Expansion", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(ivLCGraphTab), QCoreApplication::translate("PageRtData", "IV Graph", nullptr));

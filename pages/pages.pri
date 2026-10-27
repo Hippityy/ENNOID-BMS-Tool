@@ -26,6 +26,7 @@ HEADERS += \
     $$PWD/pageterminal.h \
     $$PWD/pagefirmware.h \
     $$PWD/pagertdata.h \
+    $$PWD/ltctemperature.h \
     $$PWD/pagewelcome.h \
     $$PWD/pagedataanalysis.h \
     $$PWD/pagesetupcalculators.h \
