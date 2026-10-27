@@ -15,7 +15,7 @@ on:
         description: 'Release tag to publish to'
         required: false
         type: string
-        default: 'v6.06'
+        default: 'v6.06.1'
 
 permissions:
   contents: write
@@ -135,7 +135,7 @@ jobs:
           elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
             echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           else
-            echo "tag=v6.06" >> $GITHUB_OUTPUT
+            echo "tag=v6.06.1" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload assets to release
